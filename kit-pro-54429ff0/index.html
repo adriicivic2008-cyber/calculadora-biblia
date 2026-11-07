@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Calculadora PRO de importación · La Biblia del Importador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0e0c; --card:#1a1815; --card2:#221f1a; --line:#3a342a;
+    --gold:#d4ae5f; --gold2:#f1d48e; --txt:#f3efe6; --mut:#a59c8b;
+    --ok:#6fcf8e; --bad:#ef7a6b; --in:#2a2620;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.4}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+  header{text-align:center;padding:18px 0 10px}
+  .kicker{letter-spacing:.3em;font-size:11px;color:var(--gold);text-transform:uppercase}
+  h1{font-family:"Playfair Display",serif;font-style:italic;font-weight:600;color:var(--gold2);font-size:32px;margin:6px 0 4px}
+  .sub{color:var(--mut);font-size:14px;max-width:640px;margin:0 auto}
+  .how{background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:10px 14px;margin:16px 0;font-size:14px}
+  .how b{color:var(--gold2)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+  .card h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .card h2 .n{background:var(--gold);color:#1a1815;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:0}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+  input[type=number],input[type=text],select{width:100%;background:var(--in);border:1px solid #5a4d33;color:var(--gold2);font-weight:600;font-size:16px;border-radius:8px;padding:9px 10px;font-family:inherit}
+  input:focus,select:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+  .hint{font-size:11px;color:var(--mut);margin-top:3px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .chip{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--mut)}
+  .chip b{color:var(--txt)}
+  .two{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:760px){.two{grid-template-columns:1fr 1fr}}
+  .sub-h{font-weight:700;color:var(--txt);margin:0 0 8px;font-size:15px}
+  .taxes{display:grid;gap:8px}
+  .tax{display:grid;grid-template-columns:1.3fr .8fr 1fr;gap:8px;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .tax .nm{display:flex;align-items:center;gap:8px;font-weight:600}
+  .tax input[type=number]{padding:6px 8px;font-size:15px}
+  .chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);margin:0}
+  input[type=checkbox]{accent-color:var(--gold);width:18px;height:18px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td{padding:6px 4px;border-bottom:1px solid #2c2821}
+  td.v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.tot td{font-weight:700;color:var(--txt);border-bottom:1px solid var(--line)}
+  tr.sep td{padding-top:12px;color:var(--gold);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-bottom:none}
+  .mode{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card2);position:relative}
+  .mode.best{border-color:var(--gold)}
+  .badge{position:absolute;top:-10px;right:12px;background:var(--gold);color:#1a1815;font-size:11px;font-weight:700;border-radius:10px;padding:2px 9px}
+  .big{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+  .big .l{font-size:12px;color:var(--mut)}
+  .big .x{font-size:28px;font-weight:700;color:var(--gold2);line-height:1}
+  .big .y{font-size:13px;color:var(--mut);text-align:right}
+  .warn{font-size:12px;color:#e9c46a;margin-top:8px}
+  .res{font-size:22px;font-weight:700;color:var(--gold2)}
+  .pos{color:var(--ok)} .neg{color:var(--bad)}
+  .verdict{margin-top:10px;padding:8px 10px;border-radius:8px;font-weight:600;font-size:13px;text-align:center}
+  .verdict.ok{background:rgba(111,207,142,.12);color:var(--ok)}
+  .verdict.mid{background:rgba(233,196,106,.12);color:#e9c46a}
+  .verdict.bad{background:rgba(239,122,107,.12);color:var(--bad)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{background:var(--gold);color:#1a1815;border:0;border-radius:8px;padding:10px 16px;font-weight:700;font-family:inherit;font-size:14px;cursor:pointer}
+  button.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+  .foot{color:var(--mut);font-size:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+  .msg{font-size:13px;color:var(--ok)}
+  .kit{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 4px}
+  .kit a{border:1px solid var(--line);background:var(--card2);color:var(--gold2);text-decoration:none;font-size:13px;font-weight:600;border-radius:20px;padding:7px 13px}
+  .kit a.on{background:var(--gold);color:#1a1815;border-color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Sistema de Rentabilidad del Importador</div>
+    <h1>Calculadora PRO de importación</h1>
+    <p class="sub">Poné el precio de China y te dice cuánto te cuesta puesto en Argentina, por barco o por avión, y a cuánto venderlo en Mercado Libre o Tienda Nube para ganar lo que querés.</p>
+  </header>
+  <nav class="kit"><a class="on" href="./">🧮 Calculadora PRO</a><a href="comparador.html">🥇 Comparador</a><a href="calculadora-pro.xlsx">📊 Excel PRO</a><a href="control-del-lote.xlsx">📈 Control del lote</a></nav>
+
+  <div class="how"><b>Cómo se usa:</b> cambiá los números de los recuadros dorados y todo se recalcula solo. Viene cargado con un ejemplo (2.400 aspiradoras 3 en 1 a USD 1,05) para que veas cómo funciona.</div>
+
+  <!-- 1 PRODUCTO -->
+  <section class="card">
+    <h2><span class="n">1</span> Tu producto</h2>
+    <div class="grid">
+      <div style="grid-column:span 2"><label>Nombre del producto</label><input type="text" id="nombre" value="Aspiradora 3 en 1"></div>
+      <div><label>Precio unitario en China (USD)</label><input type="number" inputmode="decimal" step="any" id="fob" value="1.05"></div>
+      <div><label>Cantidad de unidades</label><input type="number" inputmode="numeric" step="1" id="qty" value="2400"></div>
+      <div><label>Largo de la caja (cm)</label><input type="number" inputmode="decimal" step="any" id="largo" value="20"></div>
+      <div><label>Ancho (cm)</label><input type="number" inputmode="decimal" step="any" id="ancho" value="10"></div>
+      <div><label>Alto (cm)</label><input type="number" inputmode="decimal" step="any" id="alto" value="20"></div>
+      <div><label>Peso por unidad (gramos)</label><input type="number" inputmode="decimal" step="any" id="peso" value="500"></div>
+      <div><label>Arancel de importación (%)</label><input type="number" inputmode="decimal" step="any" id="arancel" value="20"><div class="hint">Sale de la NCM. Si no la sabés, confirmala con tu despachante.</div></div>
+      <div><label>Tasa de estadística (%)</label><input type="number" inputmode="decimal" step="any" id="tasa" value="3"></div>
+      <div><label>Seguro (% de FOB + flete)</label><input type="number" inputmode="decimal" step="any" id="seguro" value="1"></div>
+    </div>
+    <div class="chips" id="chipsProd"></div>
+  </section>
+
+  <!-- 2 ENVIO -->
+  <section class="card">
+    <h2><span class="n">2</span> Cómo lo traés</h2>
+    <div class="two">
+      <div>
+        <p class="sub-h">🚢 Marítimo consolidado</p>
+        <div class="grid">
+          <div><label>Flete cotizado (USD, total)</label><input type="number" inputmode="decimal" step="any" id="fleteMar" value="2000"><div class="hint" id="hintMar"></div></div>
+          <div><label>Otros gastos en Argentina (USD)</label><input type="number" inputmode="decimal" step="any" id="gastosMar" value="0"><div class="hint">Despachante, depósito, flete interno.</div></div>
+        </div>
+      </div>
+      <div>
+        <p class="sub-h">✈️ Aéreo por courier</p>
+        <div class="grid">
+          <div><label>Tarifa (USD por kg)</label><input type="number" inputmode="decimal" step="any" id="tarifaAir" value="16.70"><div class="hint">Se cobra el mayor entre peso real y volumétrico.</div></div>
+          <div><label>Otros cargos del courier (USD)</label><input type="number" inputmode="decimal" step="any" id="gastosAir" value="0"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 IMPUESTOS -->
+  <section class="card">
+    <h2><span class="n">3</span> Impuestos al importar</h2>
+    <p class="hint" style="margin:-4px 0 10px">Se calculan sobre CIF + arancel + tasa. Los <b>recuperables</b> los adelantás hoy, pero después los descontás (si sos responsable inscripto): por eso no suman a tu costo real.</p>
+    <div class="taxes" id="taxes"></div>
+  </section>
+
+  <!-- RESULTADOS IMPORTACION -->
+  <section class="card">
+    <h2><span class="n">✓</span> Costo puesto en Argentina</h2>
+    <div class="two">
+      <div class="mode" id="boxMar"></div>
+      <div class="mode" id="boxAir"></div>
+    </div>
+  </section>
+
+  <!-- 4 VENTA -->
+  <section class="card">
+    <h2><span class="n">4</span> A cuánto venderlo</h2>
+    <div class="grid" style="margin-bottom:12px">
+      <div><label>Usar el costo de</label><select id="usar"><option value="mar">Marítimo</option><option value="air">Aéreo</option></select></div>
+      <div><label>Dólar (pesos por USD)</label><input type="number" inputmode="decimal" step="any" id="dolar" value="1450"><div class="hint">Poné el del día. 1.450 es un ejemplo.</div></div>
+      <div style="display:flex;align-items:flex-end"><label class="chk"><input type="checkbox" id="comIva"> Las comisiones llevan IVA (+21%)</label></div>
+    </div>
+    <div class="two" id="canales"></div>
+  </section>
+
+  <div class="row">
+    <button id="copiar">Copiar resumen</button>
+    <button class="ghost" id="reset">Volver al ejemplo</button>
+    <span class="msg" id="msg"></span>
+  </div>
+
+  <p class="foot">Los números del ejemplo son ilustrativos. Tarifas de flete, arancel (según NCM), percepciones, comisiones y costo de cuotas cambian seguido: confirmalos con tu despachante, courier, contador y la tabla oficial de cada plataforma. El courier tiene límites de peso y valor por envío. Esta calculadora es una ayuda para hacer la cuenta; no reemplaza asesoramiento profesional. Método completo en los Módulos 8 y 11 de La Biblia del Importador.</p>
+</div>
+
+<script>
+const TAXES = [
+  {id:"iva",  nm:"IVA",            rate:21,  on:true, rec:true},
+  {id:"ivaa", nm:"IVA adicional",  rate:20,  on:true, rec:true},
+  {id:"gan",  nm:"Ganancias",      rate:6,   on:true, rec:true},
+  {id:"iibb", nm:"Ingresos Brutos",rate:2.5, on:true, rec:true},
+];
+const CANALES = [
+  {id:"ml", nm:"Mercado Libre", f:{gan:10.53, com:15, cuo:8.5, iibb:3, iigg:10, fijo:0}, lc:"Comisión de Mercado Libre (%)", lq:"Costo de cuotas (%)"},
+  {id:"tn", nm:"Tienda Nube",   f:{gan:10.53, com:1,  cuo:5,   iibb:3, iigg:10, fijo:0}, lc:"Comisión de Tienda Nube (%)",   lq:"Medio de pago / pasarela (%)"},
+];
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat(String($(id).value).replace(",", ".")); return isFinite(v) ? v : 0; };
+const nf = new Intl.NumberFormat("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const nf0 = new Intl.NumberFormat("es-AR",{maximumFractionDigits:0});
+const usd = v => (v<0?"−":"") + "US$ " + nf.format(Math.abs(v));
+const ars = v => (v<0?"−":"") + "$ " + nf0.format(Math.abs(v));
+const pct = v => nf.format(v*100).replace(/,00$/,"") + "%";
+
+// --- construir impuestos ---
+$("taxes").innerHTML = TAXES.map(t => `
+  <div class="tax">
+    <label class="chk nm" style="color:var(--txt)"><input type="checkbox" id="on_${t.id}" ${t.on?"checked":""}> ${t.nm}</label>
+    <div><input type="number" inputmode="decimal" step="any" id="r_${t.id}" value="${t.rate}" aria-label="Tasa ${t.nm} %"></div>
+    <label class="chk"><input type="checkbox" id="rec_${t.id}" ${t.rec?"checked":""}> Recuperable</label>
+  </div>`).join("");
+
+// --- construir canales ---
+$("canales").innerHTML = CANALES.map(c => `
+  <div class="mode">
+    <p class="sub-h">${c.nm}</p>
+    <div class="grid">
+      <div><label>Ganancia que querés por unidad (USD)</label><input type="number" inputmode="decimal" step="any" id="${c.id}_gan" value="${c.f.gan}"></div>
+      <div><label>${c.lc}</label><input type="number" inputmode="decimal" step="any" id="${c.id}_com" value="${c.f.com}"></div>
+      <div><label>${c.lq}</label><input type="number" inputmode="decimal" step="any" id="${c.id}_cuo" value="${c.f.cuo}"></div>
+      <div><label>Ingresos Brutos (%)</label><input type="number" inputmode="decimal" step="any" id="${c.id}_iibb" value="${c.f.iibb}"></div>
+      <div><label>Ganancias (% del precio)</label><input type="number" inputmode="decimal" step="any" id="${c.id}_iigg" value="${c.f.iigg}"></div>
+      <div><label>Envío, packaging y publicidad (USD por unidad)</label><input type="number" inputmode="decimal" step="any" id="${c.id}_fijo" value="${c.f.fijo}"></div>
+    </div>
+    <div id="${c.id}_out"></div>
+    <div class="grid" style="margin-top:12px">
+      <div><label>¿Y si lo vendo a…? (precio final con IVA, USD)</label><input type="number" inputmode="decimal" step="any" id="${c.id}_probar" placeholder="ej: 25"></div>
+    </div>
+    <div id="${c.id}_probarOut"></div>
+  </div>`).join("");
+
+const DEFAULTS = {};
+document.querySelectorAll("input,select").forEach(el => DEFAULTS[el.id] = el.type==="checkbox" ? el.checked : el.value);
+
+let last = {};
+
+function importar(modo, p){
+  const {fob,qty,cbmTot,pesoReal,pesoVol} = p;
+  const fobTot = fob*qty;
+  let flete, gastos, kgCobr=null;
+  if(modo==="mar"){ flete = num("fleteMar"); gastos = num("gastosMar"); }
+  else { kgCobr = Math.max(pesoReal,pesoVol); flete = kgCobr*num("tarifaAir"); gastos = num("gastosAir"); }
+  const seguro = (fobTot+flete)*num("seguro")/100;
+  const cif = fobTot+flete+seguro;
+  const arancel = cif*num("arancel")/100;
+  const tasa = cif*num("tasa")/100;
+  const base = cif+arancel+tasa;
+  const tx = {}; let rec=0, norec=0;
+  TAXES.forEach(t=>{
+    const v = $("on_"+t.id).checked ? base*num("r_"+t.id)/100 : 0;
+    tx[t.id]=v;
+    if($("rec_"+t.id).checked) rec+=v; else norec+=v;
+  });
+  const hoy = base+rec+norec+gastos;
+  const costo = base+norec+gastos;
+  return {fobTot,flete,seguro,cif,arancel,tasa,base,tx,rec,norec,gastos,hoy,costo,kgCobr,
+          cu: qty? costo/qty : 0, hu: qty? hoy/qty : 0};
+}
+
+function caja(id, titulo, r, qty, best){
+  const rows = [
+    ["Mercadería (FOB)", r.fobTot],
+    [r.kgCobr!==null ? `Flete (${nf.format(r.kgCobr)} kg cobrables)` : "Flete", r.flete],
+    ["Seguro", r.seguro],
+    ["CIF", r.cif, "tot"],
+    ["Arancel", r.arancel],
+    ["Tasa de estadística", r.tasa],
+    ["CIF + arancel + tasa", r.base, "tot"],
+  ];
+  const trs = rows.map(([a,b,c])=>`<tr class="${c||""}"><td>${a}</td><td class="v">${usd(b)}</td></tr>`).join("");
+  const txr = TAXES.filter(t=>$("on_"+t.id).checked).map(t=>`<tr><td>${t.nm} ${pct(num("r_"+t.id)/100)}${$("rec_"+t.id).checked?" · recup.":""}</td><td class="v">${usd(r.tx[t.id])}</td></tr>`).join("");
+  $(id).className = "mode"+(best?" best":"");
+  $(id).innerHTML = `${best?'<span class="badge">MÁS BARATO</span>':""}
+    <p class="sub-h">${titulo}</p>
+    <table>${trs}
+      <tr class="sep"><td colspan="2">Impuestos</td></tr>${txr}
+      <tr class="tot"><td>Impuestos recuperables</td><td class="v">${usd(r.rec)}</td></tr>
+      ${r.norec?`<tr class="tot"><td>Impuestos NO recuperables</td><td class="v">${usd(r.norec)}</td></tr>`:""}
+      ${r.gastos?`<tr><td>Otros gastos</td><td class="v">${usd(r.gastos)}</td></tr>`:""}
+      <tr class="tot"><td>A pagar hoy (total)</td><td class="v">${usd(r.hoy)}</td></tr>
+      <tr class="tot"><td>Costo real (sin recuperables)</td><td class="v">${usd(r.costo)}</td></tr>
+    </table>
+    <div class="big"><div><div class="l">Costo final por unidad</div><div class="x">${usd(r.cu)}</div></div>
+      <div class="y">Hoy pagás por unidad<br><b style="color:var(--txt)">${usd(r.hu)}</b><br>${ars(r.cu*num("dolar"))} c/u</div></div>
+    ${id==="boxAir" && (r.kgCobr>50 || r.fobTot>3000) ? '<div class="warn">⚠ Este pedido supera los límites habituales del courier por envío (peso o valor). Consultá si entra o si tenés que dividirlo o ir por carga.</div>':""}`;
+}
+
+function venta(c, costoU, ivaCFu, iibbPu, ganPu, dolar, k){
+  const g = num(c.id+"_gan"), com=num(c.id+"_com")/100*k, cuo=num(c.id+"_cuo")/100*k,
+        iibb=num(c.id+"_iibb")/100, iigg=num(c.id+"_iigg")/100, fijo=num(c.id+"_fijo");
+  const pctTot = com+cuo+iibb+iigg;
+  const den = 1-pctTot;
+  if(den<=0){ $(c.id+"_out").innerHTML='<div class="verdict bad">Los porcentajes suman 100% o más: así no hay precio que cierre.</div>'; return null; }
+  const p = (costoU+fijo+g)/den, pc = p*1.21;
+  const desglose = (p, gan) => {
+    const ivaDF=p*0.21, ivaPag=ivaDF-ivaCFu, iibbD=p*iibb, iiggD=p*iigg;
+    return `<table>
+      <tr class="sep"><td colspan="2">Desglose por unidad</td></tr>
+      <tr><td>Precio sin IVA</td><td class="v">${usd(p)}</td></tr>
+      <tr><td>− Costo del producto</td><td class="v">${usd(costoU)}</td></tr>
+      ${fijo?`<tr><td>− Envío, packaging y publicidad</td><td class="v">${usd(fijo)}</td></tr>`:""}
+      <tr><td>− Comisión</td><td class="v">${usd(p*com)}</td></tr>
+      <tr><td>− Cuotas / pasarela</td><td class="v">${usd(p*cuo)}</td></tr>
+      <tr><td>− Ingresos Brutos</td><td class="v">${usd(iibbD)}</td></tr>
+      <tr><td>− Ganancias</td><td class="v">${usd(iiggD)}</td></tr>
+      <tr class="tot"><td>Costo total</td><td class="v">${usd(p-gan)}</td></tr>
+      <tr class="tot"><td>Ganancia</td><td class="v ${gan>=0?"pos":"neg"}">${usd(gan)}</td></tr>
+      <tr class="sep"><td colspan="2">Lo que le pagás a la AFIP (ARCA) por unidad</td></tr>
+      <tr><td>IVA cobrado (débito)</td><td class="v">${usd(ivaDF)}</td></tr>
+      <tr><td>IVA que ya pagaste al importar (crédito)</td><td class="v">${usd(ivaCFu)}</td></tr>
+      <tr class="tot"><td>${ivaPag>=0?"IVA a pagar":"IVA saldo a favor"}</td><td class="v">${usd(Math.abs(ivaPag))}</td></tr>
+      <tr><td>IIBB determinado − percepción sufrida</td><td class="v">${usd(iibbD)} − ${usd(iibbPu)}</td></tr>
+      <tr class="tot"><td>IIBB a pagar</td><td class="v">${usd(Math.max(iibbD-iibbPu,0))}</td></tr>
+      <tr><td>Ganancias determinado − percepción sufrida</td><td class="v">${usd(iiggD)} − ${usd(ganPu)}</td></tr>
+      <tr class="tot"><td>Ganancias a pagar</td><td class="v">${usd(Math.max(iiggD-ganPu,0))}</td></tr>
+    </table>`;
+  };
+  const margen = g/p, markup = costoU? g/costoU : 0;
+  $(c.id+"_out").innerHTML = `
+    <div class="big"><div><div class="l">Precio de venta con IVA</div><div class="x">${usd(pc)}</div></div>
+      <div class="y">${ars(pc*dolar)}<br>sin IVA: ${usd(p)}</div></div>
+    <div class="chips"><span class="chip">Ganancia <b>${usd(g)}</b> · ${ars(g*dolar)}</span><span class="chip">Margen <b>${pct(margen)}</b></span><span class="chip">Remarcás <b>${nf0.format(markup*100)}%</b> sobre el costo</span><span class="chip">Si vendés todo: <b>${usd(g*num("qty"))}</b></span></div>
+    ${desglose(p,g)}`;
+  // probar precio
+  const pr = num(c.id+"_probar");
+  if(pr>0){
+    const ps = pr/1.21, gan = ps*(1-pctTot)-costoU-fijo, m = gan/ps;
+    const cls = m>=0.2?"ok":(gan>0?"mid":"bad");
+    const txt = m>=0.2?"Te sirve: margen de 20% o más":(gan>0?"Ganás poco: margen bajo el 20%":"Perdés plata a ese precio");
+    $(c.id+"_probarOut").innerHTML = `<div class="chips"><span class="chip">Ganancia <b class="${gan>=0?"pos":"neg"}">${usd(gan)}</b> · ${ars(gan*dolar)}</span><span class="chip">Margen <b>${pct(m)}</b></span></div><div class="verdict ${cls}">${txt}</div>`;
+  } else $(c.id+"_probarOut").innerHTML = "";
+  return {pc,p,g,margen};
+}
+
+function calc(){
+  const fob=num("fob"), qty=Math.max(num("qty"),0);
+  const L=num("largo"),A=num("ancho"),H=num("alto"),pg=num("peso");
+  const cbmU=L*A*H/1e6, cbmTot=cbmU*qty, pesoReal=pg/1000*qty, pesoVol=L*A*H/5000*qty;
+  $("chipsProd").innerHTML = `<span class="chip">Volumen por unidad <b>${cbmU.toLocaleString("es-AR",{maximumFractionDigits:4})} m³</b></span>
+    <span class="chip">Volumen total <b>${nf.format(cbmTot)} m³</b></span>
+    <span class="chip">Peso real total <b>${nf.format(pesoReal)} kg</b></span>
+    <span class="chip">Peso volumétrico (aéreo) <b>${nf.format(pesoVol)} kg</b></span>`;
+  $("hintMar").textContent = cbmTot>0 ? `Equivale a US$ ${nf.format(num("fleteMar")/cbmTot)} por m³.` + (cbmTot>10?" Ojo: supera 10 m³, quizás conviene contenedor.":"") : "";
+  const p={fob,qty,cbmTot,pesoReal,pesoVol};
+  const mar=importar("mar",p), air=importar("air",p);
+  const bestMar = mar.cu<=air.cu;
+  caja("boxMar","🚢 Marítimo consolidado",mar,qty,bestMar);
+  caja("boxAir","✈️ Aéreo por courier",air,qty,!bestMar);
+  const r = $("usar").value==="mar"?mar:air;
+  const recOf = id => $("rec_"+id).checked ? r.tx[id] : 0;
+  const ivaCFu = qty?(recOf("iva")+recOf("ivaa"))/qty:0, iibbPu = qty?recOf("iibb")/qty:0, ganPu = qty?recOf("gan")/qty:0;
+  const k = $("comIva").checked?1.21:1, dolar=num("dolar");
+  const out = {};
+  CANALES.forEach(c=> out[c.id]=venta(c, r.cu, ivaCFu, iibbPu, ganPu, dolar, k));
+  last = {nombre:$("nombre").value, qty, mar, air, usar:$("usar").value, out};
+}
+
+document.addEventListener("input", calc);
+document.addEventListener("change", calc);
+$("reset").onclick = ()=>{ document.querySelectorAll("input,select").forEach(el=>{ if(el.id in DEFAULTS){ if(el.type==="checkbox") el.checked=DEFAULTS[el.id]; else el.value=DEFAULTS[el.id]; }}); calc(); };
+$("copiar").onclick = async ()=>{
+  const L=last, lines=[
+    `${L.nombre} · ${nf0.format(L.qty)} unidades`,
+    `Marítimo: costo por unidad ${usd(L.mar.cu)} (hoy pagás ${usd(L.mar.hoy)})`,
+    `Aéreo: costo por unidad ${usd(L.air.cu)} (hoy pagás ${usd(L.air.hoy)})`,
+  ];
+  CANALES.forEach(c=>{ const o=L.out[c.id]; if(o) lines.push(`${c.nm}: vender a ${usd(o.pc)} con IVA → ganás ${usd(o.g)} por unidad (margen ${pct(o.margen)})`); });
+  try{ await navigator.clipboard.writeText(lines.join("\n")); $("msg").textContent="Resumen copiado."; }
+  catch(e){ $("msg").textContent="No se pudo copiar desde acá."; }
+  setTimeout(()=>$("msg").textContent="",2500);
+};
+calc();
+</script>
+</body>
+</html>
